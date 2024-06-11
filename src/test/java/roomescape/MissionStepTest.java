@@ -41,7 +41,7 @@ public class MissionStepTest {
     }
 
     @Test
-    void saveReservation() {
+    void saveAndDeleteReservation() {
         Map<String, String> params = new HashMap<>();
         params.put("name", "브라운");
         params.put("date", "2023-08-05");
@@ -60,5 +60,16 @@ public class MissionStepTest {
                 .then().log().all()
                 .statusCode(200)
                 .body("reservations.size()", is(4));
+
+        RestAssured.given().log().all()
+                .when().delete("/admin/reservations/4")
+                .then().log().all()
+                .statusCode(204);
+
+        RestAssured.given().log().all()
+                .when().get("/admin/reservations")
+                .then().log().all()
+                .statusCode(200)
+                .body("reservations.size()", is(3));
     }
 }

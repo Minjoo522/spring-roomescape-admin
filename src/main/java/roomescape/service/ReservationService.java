@@ -23,4 +23,8 @@ public class ReservationService {
         Reservation newReservation = reservationRepository.save(request.toReservation());
         return ReservationResponse.from(newReservation);
     }
+
+    public void delete(long id) {
+        reservationRepository.delete(id);
+    }
 }
