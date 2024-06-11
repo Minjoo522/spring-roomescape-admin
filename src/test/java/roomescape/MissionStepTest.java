@@ -16,4 +16,12 @@ public class MissionStepTest {
                 .then().log().all()
                 .statusCode(200);
     }
+
+    @Test
+    void reservationPage() {
+        RestAssured.given().log().all()
+                .when().get("/admin/reservation")
+                .then().log().all()
+                .statusCode(200);
+    }
 }
