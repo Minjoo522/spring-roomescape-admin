@@ -1,8 +1,13 @@
 package roomescape.controller.api;
 
+import java.net.URI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import roomescape.dto.ReservationRequest;
+import roomescape.dto.ReservationResponse;
 import roomescape.dto.ReservationResponses;
 import roomescape.service.ReservationService;
 
@@ -17,5 +22,11 @@ public class AdminReservationController {
     @GetMapping("/admin/reservations")
     public ResponseEntity<ReservationResponses> getReservations() {
         return ResponseEntity.ok(reservationService.findAll());
+    }
+
+    @PostMapping("/admin/reservations")
+    public ResponseEntity<ReservationResponse> saveReservation(@RequestBody ReservationRequest request) {
+        ReservationResponse response = reservationService.save(request);
+        return ResponseEntity.created(URI.create("/reservations/" + response.id())).body(response);
     }
 }

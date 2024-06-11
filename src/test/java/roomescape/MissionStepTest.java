@@ -3,8 +3,12 @@ package roomescape;
 import static org.hamcrest.Matchers.is;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -34,5 +38,27 @@ public class MissionStepTest {
                 .then().log().all()
                 .statusCode(200)
                 .body("reservations.size()", is(3));
+    }
+
+    @Test
+    void saveReservation() {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "브라운");
+        params.put("date", "2023-08-05");
+        params.put("time", "15:40");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/admin/reservations")
+                .then().log().all()
+                .statusCode(201)
+                .body("id", is(4));
+
+        RestAssured.given().log().all()
+                .when().get("/admin/reservations")
+                .then().log().all()
+                .statusCode(200)
+                .body("reservations.size()", is(4));
     }
 }
